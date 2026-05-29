@@ -5,122 +5,59 @@ import java.util.Scanner;
 public class TaskHandler {
     private List<Task> tasks = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
-    private StringHelper stringHelper = new StringHelper();
 
     public List<Task> getTasks() {
         return tasks;
     }
 
-    private void addTask(Task task) {
+    public List<Task> getDoneTasks() {
+        return tasks.stream().filter(task -> task.isDone()).toList();
+    }
+
+    public List<Task> getUndoneTasks() {
+        return tasks.stream().filter(task -> !task.isDone()).toList();
+    }
+
+    public List<Task> getTasksWithCategory(String category){
+        return tasks.stream().filter(task -> task.getCategory().equals(category)).toList();
+    }
+
+    public void addTask(Task task) {
         this.tasks.add(task);
     }
 
-    public void addTask() {
-        System.out.println("Enter a task to add to the list:");
-        Task task = new Task();
-        task.setDescription(scanner.nextLine());
+    public boolean tryDeleteTask(int taskNumber) {
 
-        System.out.println("Enter priority from 1 to 3: ");
-
-        int priority = stringHelper.tryParseString(scanner.nextLine());
-
-        while (priority < 1 || priority > 3) {
-            System.out.println("Enter priority from 1 to 3: ");
-            priority = stringHelper.tryParseString(scanner.nextLine());
-        }
-
-        System.out.println("Enter category:");
-
-        String category = scanner.nextLine();
-
-        System.out.println("Enter days deadline:");
-
-        int daysToAdd = stringHelper.tryParseString(scanner.nextLine());
-
-        while (daysToAdd < 0) {
-            System.out.println("Enter days deadline:");
-            daysToAdd = stringHelper.tryParseString(scanner.nextLine());
-        }
-
-        task.setPriority(priority);
-        task.setCategory(category);
-        task.setDeadLineDate(daysToAdd);
-        addTask(task);
-    }
-
-    public void viewTasks() {
-        var allTasks = getTasks();
-        System.out.println("Total tasks " + allTasks.size() + ":");
-        for (Task task : allTasks) {
-            System.out.println(
-                    (task.getPriority() == 1 ? "Srochno bleat! " : "") +
-                            "Task: " + task.getDescription() + "\n" +
-                            "Deadline: " + task.getDeadLineDate() + "\n" +
-                            "Category: " + task.getCategory() + "\n" +
-                            "Priority: " + task.getPriority() + "\n" +
-                            "Is Done" + (task.isDone() ? " (x)" : " ()")
-            );
-        }
-    }
-
-    public void viewTasks(boolean done) {
-
-        if (done) {
-            System.out.println("Done tasks:");
-
-            for (Task task : getTasks()) {
-
-                if (!task.isDone()) {
-                    continue;
-                }
-
-                System.out.println("Task: " + task.getDescription() + "\n" +
-                        "Deadline: " + task.getDeadLineDate() + "\n" +
-                        "Priority: " + task.getPriority() + "\n" +
-                        "Is Done" + (task.isDone() ? " (x)" : " ()"));
-            }
+        if (taskNumber > 0 && taskNumber <= tasks.size()) {
+            tasks.remove(taskNumber - 1);
+            return true;
         } else {
-            System.out.println("Undone tasks:");
-
-            for (Task task : getTasks()) {
-
-                if (task.isDone()) {
-                    continue;
-                }
-
-                System.out.println(task.getDescription() + " " + task.getDeadLineDate() + " " + task.getPriority() + (task.isDone() ? " (x)" : " ()"));
-            }
+            return false;
         }
     }
 
-    public void viewTasksWithCategory() {
-
-        System.out.println("Write category:");
-
-        String category = scanner.nextLine();
-
-        System.out.println("Current tasks:");
-        for (Task task : getTasks()) {
-
-            if (task.getCategory() != null && task.getCategory().equals(category)) {
-                System.out.println(task.getDescription() + " " + task.getDeadLineDate() + " " + task.getPriority() + (task.isDone() ? " (x)" : " ()"));
-
-            }
+    public boolean tryMarkAsDone(int taskNumber) {
+        if (taskNumber > 0 && taskNumber <= tasks.size()) {
+            Task task = tasks.get(taskNumber - 1);
+            task.setDone(true);
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public void viewTasksWithSpecificPriority() {
-        System.out.println("Write priority:");
-
-        int priority = stringHelper.tryParseString(scanner.nextLine());
-
-        while (priority < 1 || priority > 3) {
-            System.out.println("Enter priority from 1 to 3: ");
-            priority = stringHelper.tryParseString(scanner.nextLine());
+    public boolean tryMarkAsUnDone(int taskNumber) {
+        if (taskNumber > 0 && taskNumber <= tasks.size()) {
+            Task task = tasks.get(taskNumber - 1);
+            task.setDone(false);
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        var tasks = getTasks();
-        ArrayList<Task> sortedTasks = new ArrayList<>();
+    public List<Task> getTasksSortedByPriority(int priority) {
+        List<Task> sortedTasks = new ArrayList<>(tasks);
 
         for (Task value : tasks) {
 
@@ -129,49 +66,6 @@ public class TaskHandler {
             }
         }
 
-        for (Task task : sortedTasks) {
-            System.out.println(task.getDescription() + " " + task.getDeadLineDate() + " " + task.getPriority() + (task.isDone() ? " (x)" : " ()"));
-        }
+        return sortedTasks;
     }
-
-    public void deleteTask() {
-
-        System.out.println("Enter the task number to delete:");
-
-        int taskNumber = stringHelper.tryParseString(scanner.nextLine());
-
-        if (taskNumber > 0 && taskNumber <= getTasks().size()) {
-            getTasks().remove(taskNumber - 1);
-            System.out.println("Task deleted.");
-        } else {
-            System.out.println("Invalid task number.");
-        }
-    }
-
-    public void markAsDone() {
-
-        System.out.println("Enter the task number to mark as done:");
-
-        int taskNumber = stringHelper.tryParseString(scanner.nextLine());
-
-        if (taskNumber > 0 && taskNumber <= getTasks().size()) {
-            Task task = getTasks().get(taskNumber - 1);
-            task.setDone(true);
-            System.out.println("Task marked as done.");
-        }
-    }
-
-    public void markAsUndone() {
-
-        System.out.println("Enter the task number to mark as undone:");
-
-        int taskNumber = stringHelper.tryParseString(scanner.nextLine());
-
-        if (taskNumber > 0 && taskNumber <= getTasks().size()) {
-            Task task = getTasks().get(taskNumber - 1);
-            task.setDone(false);
-            System.out.println("Task marked as undone.");
-        }
-    }
-
 }

@@ -1,5 +1,10 @@
-public class StringHelper {
-    public int tryParseString(String string) {
+public final class StringHelper {
+
+    private StringHelper(){
+        throw new UnsupportedOperationException("Utility class");
+    }
+
+    public static int tryParseString(String string) {
         try {
             return Integer.parseInt(string);
         } catch (NumberFormatException e) {
