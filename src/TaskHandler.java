@@ -1,71 +1,22 @@
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class TaskHandler {
-    private List<Task> tasks = new ArrayList<>();
-    private Scanner scanner = new Scanner(System.in);
+public interface TaskHandler {
 
-    public List<Task> getTasks() {
-        return tasks;
-    }
+    List<Task> getTasks();
 
-    public List<Task> getDoneTasks() {
-        return tasks.stream().filter(task -> task.isDone()).toList();
-    }
+    List<Task> getDoneTasks();
 
-    public List<Task> getUndoneTasks() {
-        return tasks.stream().filter(task -> !task.isDone()).toList();
-    }
+    List<Task> getUndoneTasks();
 
-    public List<Task> getTasksWithCategory(String category){
-        return tasks.stream().filter(task -> task.getCategory().equals(category)).toList();
-    }
+    List<Task> getTasksWithCategory(String category);
 
-    public void addTask(Task task) {
-        this.tasks.add(task);
-    }
+    List<Task> getTasksSortedByPriority(int priority);
 
-    public boolean tryDeleteTask(int taskNumber) {
+    boolean addTask(Task task);
 
-        if (taskNumber > 0 && taskNumber <= tasks.size()) {
-            tasks.remove(taskNumber - 1);
-            return true;
-        } else {
-            return false;
-        }
-    }
+    boolean tryDeleteTask(int taskNumber);
 
-    public boolean tryMarkAsDone(int taskNumber) {
-        if (taskNumber > 0 && taskNumber <= tasks.size()) {
-            Task task = tasks.get(taskNumber - 1);
-            task.setDone(true);
-            return true;
-        } else {
-            return false;
-        }
-    }
+    boolean tryMarkAsDone(int taskNumber);
 
-    public boolean tryMarkAsUnDone(int taskNumber) {
-        if (taskNumber > 0 && taskNumber <= tasks.size()) {
-            Task task = tasks.get(taskNumber - 1);
-            task.setDone(false);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public List<Task> getTasksSortedByPriority(int priority) {
-        List<Task> sortedTasks = new ArrayList<>(tasks);
-
-        for (Task value : tasks) {
-
-            if (value.getPriority() == priority) {
-                sortedTasks.add(value);
-            }
-        }
-
-        return sortedTasks;
-    }
+    boolean tryMarkAsUnDone(int taskNumber);
 }
