@@ -47,4 +47,9 @@ public class Task {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    @Override
+    public String toString() {
+        return description + " " + deadLineDate + " " + priority + (isDone ? " (x)" : " ()");
+    }
 }

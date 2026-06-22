@@ -21,12 +21,14 @@ public class TaskHandlerImpl implements TaskHandler {
 
     @Override
     public List<Task> getTasksWithCategory(String category) {
-        return tasks.stream().filter(task -> task.getCategory().equals(category)).toList();
+        return tasks.stream()
+                .filter(task -> task.getCategory().equals(category))
+                .toList();
     }
 
     @Override
     public boolean addTask(Task task) {
-        this.tasks.add(task);
+        tasks.add(task);
         return true;
     }
 
