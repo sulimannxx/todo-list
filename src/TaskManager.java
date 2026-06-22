@@ -2,8 +2,13 @@ import java.util.Scanner;
 
 public class TaskManager {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final TaskHandler taskHandler = new TaskHandlerImpl();
+    private final Scanner scanner;
+    private final TaskHandler taskHandler;
+
+    public TaskManager(TaskHandler taskHandler, Scanner scanner) {
+        this.taskHandler = taskHandler;
+        this.scanner = scanner;
+    }
 
     public void handleInput() {
         String input = scanner.nextLine();
@@ -18,7 +23,7 @@ public class TaskManager {
             case "7" -> TaskPrinter.viewAllUndoneTasks(taskHandler);
             case "8" -> TaskPrinter.viewAllDoneTasks(taskHandler);
             case "9" -> TaskPrinter.viewAllTasksWithCategory(taskHandler, scanner);
-            case "0" -> {}
+            case "0" -> System.exit(0);
             default -> System.out.println("Invalid input. Please try again.");
         }
     }

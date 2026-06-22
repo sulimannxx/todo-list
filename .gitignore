@@ -4,6 +4,9 @@ out/
 !**/src/test/**/out/
 .kotlin
 
+### Maven ###
+target/
+
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -25,6 +28,9 @@ bin/
 
 ### VS Code ###
 .vscode/
+
+### Environment ###
+.env
 
 ### Mac OS ###
 .DS_Store

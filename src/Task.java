@@ -40,6 +40,10 @@ public class Task {
         deadLineDate = LocalDate.now().plusDays(daysToAdd);
     }
 
+    public void setDeadLineDate(LocalDate deadLineDate) {
+        this.deadLineDate = deadLineDate;
+    }
+
     public String getCategory() {
         return category;
     }
